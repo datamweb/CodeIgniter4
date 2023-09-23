@@ -13,6 +13,7 @@ namespace CodeIgniter\Debug;
 
 use ArgumentCountError;
 use CodeIgniter\Test\CIUnitTestCase;
+use ErrorException;
 use RuntimeException;
 
 /**
@@ -171,7 +172,11 @@ final class TimerTest extends CIUnitTestCase
 
     public function testRecordThrowsErrorOnCallableWithParams(): void
     {
-        $this->expectException(ArgumentCountError::class);
+        if (PHP_VERSION_ID >= 80000) {
+            $this->expectException(ArgumentCountError::class);
+        } else {
+            $this->expectException(ErrorException::class);
+        }
 
         $timer = new Timer();
         $timer->record('error', 'strlen');

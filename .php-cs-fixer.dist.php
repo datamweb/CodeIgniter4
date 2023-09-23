@@ -80,10 +80,13 @@ $config = Factory::create(new CodeIgniter4(), $overrides, $options)->forLibrary(
     'admin@codeigniter.com'
 );
 
-$config
-    ->registerCustomFixers(FixerGenerator::create('vendor/nexusphp/cs-config/src/Fixer', 'Nexus\\CsConfig\\Fixer'))
-    ->setRules(array_merge($config->getRules(), [
-        NoCodeSeparatorCommentFixer::name() => true,
-    ]));
+// @TODO: remove this check when support for PHP 7.4 is dropped
+if (PHP_VERSION_ID >= 80000) {
+    $config
+        ->registerCustomFixers(FixerGenerator::create('vendor/nexusphp/cs-config/src/Fixer', 'Nexus\\CsConfig\\Fixer'))
+        ->setRules(array_merge($config->getRules(), [
+            NoCodeSeparatorCommentFixer::name() => true,
+        ]));
+}
 
 return $config;
